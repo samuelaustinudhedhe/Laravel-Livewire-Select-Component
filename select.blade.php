@@ -15,31 +15,31 @@
 @props(['disabled' => false, 'loadJS' => false, 'defaultValue' => null, 'selected' => null])
 
 <select {{-- Load the function if loadJS attribuite is set to true --}}
-    @if ($loadJS === 'true' || $loadJS) x-data="{
+    @if ($loadJS === 'true' || $loadJS) 
+    x-data="{
         setDefaultOption() {
-            const selectElements = document.querySelectorAll('select');
+            const selectElements = document.querySelectorAll('select[data-default-value]');
             selectElements.forEach(select => { 
                 // Get the default value from the data attribute
                 const defaultValue = select.getAttribute('data-default-value');
 
                 Array.from(select.attributes).forEach(attr => {
-                    if (attr.name.startsWith('wire:model')) {
-                        let modelName = attr.value;
+                    if (attr.name.startsWith('wire:')) {
 
                         // Use Livewire's @this.get() to check if the model has a value
-                        if (!@this.get(modelName)) {
+                        if (!@this.get(`${attr.value}`)) {
                             if (defaultValue) {
-                                @this.set(modelName, defaultValue);
+                                @this.set(`${attr.value}`, defaultValue);
                                 select.value = defaultValue; // Set the select element's value to defaultValue
                             } else {
                                 // Loop through options to find the one with the 'selected' attribute
                                 let defaultOption = Array.from(select.options).find(option => option.hasAttribute('selected'));
-                                if (defaultOption) {
-                                    @this.set(modelName, defaultOption.value);
+                                if (defaultOption && defaultOption.value) {
+                                    @this.set(`${attr.value}`, defaultOption.value);
                                     select.value = defaultOption.value; // Set the select element's value to the default option
                                 } else {
                                     // If select.value is not empty, use it as the default
-                                    @this.set(modelName, select.value);
+                                    @this.set(`${attr.value}`, select.value);
                                 }
                             }
                         }
