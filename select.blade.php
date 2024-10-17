@@ -8,7 +8,7 @@
   --              The component also includes an optional loadJS feature that enables JavaScript 
   --              to dynamically set the default option when necessary, improving 
   --              flexibility and performance.
-  --              
+  -- Version: 1.0.1  
   -- Author: SAU (https://github.com/samuelaustinudhedhe/) 
 --}}
 
